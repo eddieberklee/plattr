@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="foreground_padding_white_border" type="id">8dp</item>
+</resources>

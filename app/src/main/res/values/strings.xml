@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Plattr</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Dialogs -->
+    <string name="choose_picture_dialog_title">Choose Picture</string>
+
+    <!-- Errors -->
+    <string name="error_bad_cursor">Bad cursor!</string>
+    <string name="save_button_text">Save to Camera Roll</string>
+    <string name="set_foreground_image">Set Circle</string>
+    <string name="set_background_image">Set Background</string>
+
+</resources>
