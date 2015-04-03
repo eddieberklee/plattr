@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -25,7 +26,18 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.compscieddy.plattr.ui.RoundImage;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
+import com.facebook.drawee.drawable.ScalingUtils;
+import com.facebook.drawee.generic.GenericDraweeHierarchy;
+import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
+import com.facebook.drawee.generic.RoundingParams;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.DraweeView;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -54,8 +66,8 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
 
   /* Member Variables - Views */
   private View mRootLayout;
-  private SimpleDraweeView mBackgroundImage;
-  private SimpleDraweeView mForegroundImage;
+  private DraweeView mBackgroundImage;
+  private DraweeView mForegroundImage;
   private Button mSaveButton;
   private RelativeLayout mImagesLayout;
   private Button mPickForegroundButton;
@@ -172,8 +184,8 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     mRootLayout = inflater.inflate(R.layout.fragment_picture_composer, container, false);
 
-    mBackgroundImage = (SimpleDraweeView) mRootLayout.findViewById(R.id.background_image);
-    mForegroundImage = (SimpleDraweeView) mRootLayout.findViewById(R.id.foreground_image);
+    mBackgroundImage = (DraweeView) mRootLayout.findViewById(R.id.background_image);
+    mForegroundImage = (DraweeView) mRootLayout.findViewById(R.id.foreground_image);
     mSaveButton = (Button) mRootLayout.findViewById(R.id.save_button);
     mImagesLayout = (RelativeLayout) mRootLayout.findViewById(R.id.images_layout);
     mPickForegroundButton = (Button) mRootLayout.findViewById(R.id.pick_foreground_button);
@@ -252,6 +264,30 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
           break;
         case ACTION_REQUEST_GALLERY_FOREGROUND:
 //          mForegroundImagePath = imagePath;
+          boolean shouldResize = true;
+          if (shouldResize) {
+            int width, height;
+            width = height = getResources().getDimensionPixelOffset(R.dimen.foreground_image_size);
+            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(mImageCaptureUri)
+                .setResizeOptions(new ResizeOptions(width, height))
+                .build();
+            PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
+                .setOldController(mForegroundImage.getController())
+                .setImageRequest(request)
+                .build();
+            mForegroundImage.setController(controller);
+//            GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(getResources());
+//            GenericDraweeHierarchy hierarchy = builder
+//                .setActualImageScaleType(ScalingUtils.ScaleType.CENTER_CROP)
+//                .build();
+//            RoundingParams roundingParams = new RoundingParams();
+//            roundingParams.setRoundAsCircle(true);
+//            hierarchy.setRoundingParams(roundingParams);
+//            mForegroundImage.setHierarchy(hierarchy);
+
+//            controller.setHierarchy(hierarchy);
+//            mForegroundImage.setController(controller);
+          }
           mForegroundImage.setImageURI(mImageCaptureUri);
           break;
 
