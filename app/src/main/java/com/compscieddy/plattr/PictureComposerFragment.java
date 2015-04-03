@@ -57,8 +57,10 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
   private ImageView mForegroundImage;
   private Button mSaveButton;
   private RelativeLayout mImagesLayout;
-  private Button mSetForegroundImageButton;
-  private Button mSetBackgroundImageButton;
+  private Button mPickForegroundButton;
+  private Button mPickBackgroundButton;
+  private String mBackgroundImagePath;
+  private String mForegroundImagePath;
 
   private View.OnTouchListener mForegroundImageOnTouchListener = new View.OnTouchListener() {
     @Override
@@ -109,7 +111,7 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
     @Override
     public void onClick(View v) {
       final float startTime = System.currentTimeMillis();
-      Log.d(TAG, "Save button started " + startTime);
+      Log.d(TAG, "Save button started at: " + startTime);
       AsyncTask<Void, Void, Void> saveImageTask = new AsyncTask<Void, Void, Void>() {
         @Override
         protected void onPreExecute() {
@@ -125,25 +127,30 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
             try {
               file.createNewFile();
             } catch (IOException e) {
-              Log.e(TAG, "Error creating file", e);
+              LogUtils.errorAndToast(getActivity(), TAG, "Error creating file", e);
             }
           }
           FileOutputStream outputStream = null;
           try {
             outputStream = new FileOutputStream(file);
             Bitmap compositeBitmap = Bitmap.createBitmap(mImagesLayout.getWidth(), mImagesLayout.getHeight(), Bitmap.Config.ARGB_8888);
+
+//            Bitmap backgroundBitmap = Utils.convertToMutable(BitmapFactory.decodeFile(mBackgroundImagePath));
+//            compositeBitmap = backgroundBitmap;
+
             mImagesLayout.draw(new Canvas(compositeBitmap));
             compositeBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HHmmss"); // ("yyyy_MM_dd_HH_mm_ss");
             Date now = new Date();
             String fileName = formatter.format(now);
+
             Utils.insertImage(getActivity().getContentResolver(), compositeBitmap, fileName, "Plattr Image");
 
           } catch (FileNotFoundException e) {
-            Log.e(TAG, "File not found", e);
+            LogUtils.errorAndToast(getActivity(), TAG, "File not found", e);
           } catch (Exception e) {
-            Log.e(TAG, "General Exception outputting composite image", e);
+            LogUtils.errorAndToast(getActivity(), TAG, "General exception outputting composite image", e);
           }
           return null;
         }
@@ -161,11 +168,6 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
   }
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-  }
-
-  @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     mRootLayout = inflater.inflate(R.layout.fragment_picture_composer, container, false);
 
@@ -173,13 +175,14 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
     mForegroundImage = (ImageView) mRootLayout.findViewById(R.id.foreground_image);
     mSaveButton = (Button) mRootLayout.findViewById(R.id.save_button);
     mImagesLayout = (RelativeLayout) mRootLayout.findViewById(R.id.images_layout);
-    mSetForegroundImageButton = (Button) mRootLayout.findViewById(R.id.set_foreground_button);
-    mSetBackgroundImageButton = (Button) mRootLayout.findViewById(R.id.set_background_button);
+    mPickForegroundButton = (Button) mRootLayout.findViewById(R.id.pick_foreground_button);
+    mPickBackgroundButton = (Button) mRootLayout.findViewById(R.id.pick_background_button);
 
     mBackgroundImage.getViewTreeObserver().addOnGlobalLayoutListener(this);
 
-    mSetForegroundImageButton.setOnClickListener(getChoosePictureOnClick(ACTION_REQUEST_GALLERY_FOREGROUND));
-    mSetBackgroundImageButton.setOnClickListener(getChoosePictureOnClick(ACTION_REQUEST_GALLERY_BACKGROUND));
+    mPickForegroundButton.setOnClickListener(getChoosePictureOnClick(ACTION_REQUEST_GALLERY_FOREGROUND));
+    mPickBackgroundButton.setOnClickListener(getChoosePictureOnClick(ACTION_REQUEST_GALLERY_BACKGROUND));
+
     mBackgroundImage.setOnLongClickListener(getChoosePictureOnLongClickListener(ACTION_REQUEST_GALLERY_BACKGROUND));
     mForegroundImage.setOnTouchListener(mForegroundImageOnTouchListener);
     mSaveButton.setOnClickListener(mSaveButtonOnClickListener);
@@ -217,35 +220,38 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (resultCode == Activity.RESULT_OK) {
+      mImageCaptureUri = data.getData();
+
+//      String[] filePath = { MediaStore.Images.Media.DATA };
+//      Cursor cursor = getActivity().getContentResolver().query(mImageCaptureUri, filePath, null, null, null);
+//      String imagePath = null;
+//      if (cursor != null && cursor.moveToFirst()) {
+//        cursor.moveToFirst();
+//        imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
+//      } else {
+//        LogUtils.errorAndToast(getActivity(), TAG, getString(R.string.error_bad_cursor), new Exception());
+//      }
+
+//          Intent cropIntent = new Intent("com.android.camera.action.CROP");
+//          cropIntent.setDataAndType(mImageCaptureUri, "image/*");
+//          cropIntent.putExtra("crop", "true");
+//          cropIntent.putExtra("aspectX", 1);
+//          cropIntent.putExtra("aspectY", 1);
+//          cropIntent.putExtra("return-data", true);
+//          if (requestCode == ACTION_REQUEST_GALLERY_BACKGROUND) {
+//            startActivityForResult(cropIntent, ACTION_PIC_CROP_BACKGROUND);
+//          } else {
+//            startActivityForResult(cropIntent, ACTION_PIC_CROP_FOREGROUND);
+//          }
+
       switch (requestCode) {
         case ACTION_REQUEST_GALLERY_BACKGROUND:
-        case ACTION_REQUEST_GALLERY_FOREGROUND:
-          mImageCaptureUri = data.getData();
-
-          Intent cropIntent = new Intent("com.android.camera.action.CROP");
-          cropIntent.setDataAndType(mImageCaptureUri, "image/*");
-          cropIntent.putExtra("crop", "true");
-          cropIntent.putExtra("aspectX", 1);
-          cropIntent.putExtra("aspectY", 1);
-          cropIntent.putExtra("outputX", 256);
-          cropIntent.putExtra("outputY", 256);
-          cropIntent.putExtra("return-data", true);
-          if (requestCode == ACTION_REQUEST_GALLERY_BACKGROUND) {
-            startActivityForResult(cropIntent, ACTION_PIC_CROP_BACKGROUND);
-          } else {
-            startActivityForResult(cropIntent, ACTION_PIC_CROP_FOREGROUND);
-          }
-
-          String[] filePath = { MediaStore.Images.Media.DATA };
-          Cursor cursor = getActivity().getContentResolver().query(mImageCaptureUri, filePath, null, null, null);
-          if (cursor != null && cursor.moveToFirst()) {
-            cursor.moveToFirst();
-            String imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
-          } else {
-            Log.e(TAG, getString(R.string.error_bad_cursor));
-          }
-
+          mBackgroundImagePath = imagePath;
           break;
+        case ACTION_REQUEST_GALLERY_FOREGROUND:
+          mForegroundImagePath = imagePath;
+          break;
+
         case ACTION_PIC_CROP_BACKGROUND:
         case ACTION_PIC_CROP_FOREGROUND:
           Bundle extras = data.getExtras();
@@ -255,7 +261,6 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
           } else {
             Drawable roundedImage = new RoundImage(bitmap);
             mForegroundImage.setImageDrawable(roundedImage);
-//            mForegroundImage.setImageBitmap(bitmap);
           }
           break;
       }

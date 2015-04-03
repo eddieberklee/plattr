@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".PictureComposerActivity$PlaceholderFragment"
@@ -12,16 +12,24 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/images_layout">
         <Button
-            android:id="@+id/set_background_button"
+            android:id="@+id/pick_background_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/set_background_image"/>
+            android:text="@string/pick_background_image"
+            android:textSize="@dimen/foreground_background_button_text_size"/>
         <Button
-            android:id="@+id/set_foreground_button"
+            android:id="@+id/pick_foreground_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/set_foreground_image"/>
+            android:text="@string/pick_foreground_image"
+            android:textSize="@dimen/foreground_background_button_text_size"/>
     </LinearLayout>
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/my_image_view"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        fresco:placeholderImage="@drawable/ic_launcher"/>
 
     <RelativeLayout
         android:id="@+id/images_layout"

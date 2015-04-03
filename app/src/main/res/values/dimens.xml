@@ -5,4 +5,8 @@
 
     <dimen name="foreground_image_size">120dp</dimen>
     <dimen name="foreground_margin">16dp</dimen>
+
+    <!-- Font Sizes -->
+    <dimen name="foreground_background_button_text_size">10sp</dimen>
+
 </resources>

@@ -11,12 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+
 
 public class PictureComposerActivity extends ActionBarActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Fresco.initialize(this);
     setContentView(R.layout.activity_picture_composer);
     if (savedInstanceState == null) {
       getSupportFragmentManager().beginTransaction()
