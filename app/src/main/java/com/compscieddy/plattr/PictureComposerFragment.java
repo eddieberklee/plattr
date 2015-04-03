@@ -25,6 +25,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.compscieddy.plattr.ui.RoundImage;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -53,8 +54,8 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
 
   /* Member Variables - Views */
   private View mRootLayout;
-  private ImageView mBackgroundImage;
-  private ImageView mForegroundImage;
+  private SimpleDraweeView mBackgroundImage;
+  private SimpleDraweeView mForegroundImage;
   private Button mSaveButton;
   private RelativeLayout mImagesLayout;
   private Button mPickForegroundButton;
@@ -171,8 +172,8 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     mRootLayout = inflater.inflate(R.layout.fragment_picture_composer, container, false);
 
-    mBackgroundImage = (ImageView) mRootLayout.findViewById(R.id.background_image);
-    mForegroundImage = (ImageView) mRootLayout.findViewById(R.id.foreground_image);
+    mBackgroundImage = (SimpleDraweeView) mRootLayout.findViewById(R.id.background_image);
+    mForegroundImage = (SimpleDraweeView) mRootLayout.findViewById(R.id.foreground_image);
     mSaveButton = (Button) mRootLayout.findViewById(R.id.save_button);
     mImagesLayout = (RelativeLayout) mRootLayout.findViewById(R.id.images_layout);
     mPickForegroundButton = (Button) mRootLayout.findViewById(R.id.pick_foreground_button);
@@ -246,10 +247,12 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
 
       switch (requestCode) {
         case ACTION_REQUEST_GALLERY_BACKGROUND:
-          mBackgroundImagePath = imagePath;
+//          mBackgroundImagePath = imagePath;
+          mBackgroundImage.setImageURI(mImageCaptureUri);
           break;
         case ACTION_REQUEST_GALLERY_FOREGROUND:
-          mForegroundImagePath = imagePath;
+//          mForegroundImagePath = imagePath;
+          mForegroundImage.setImageURI(mImageCaptureUri);
           break;
 
         case ACTION_PIC_CROP_BACKGROUND:
@@ -277,6 +280,9 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
     ViewGroup.LayoutParams layoutParams = mBackgroundImage.getLayoutParams();
     layoutParams.height = width;
     mBackgroundImage.setLayoutParams(layoutParams);
+
+    // Coming back to this, I think this was necessary to get the coordinates of the corners
+    // TODO: Just get the screen width (which is also the height) then use the padding dimension to calculate
 
     int padding = getResources().getDimensionPixelOffset(R.dimen.foreground_margin);
     Point point;

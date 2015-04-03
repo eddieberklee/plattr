@@ -7,10 +7,40 @@
     tools:context=".PictureComposerActivity$PlaceholderFragment"
     android:id="@+id/root_layout">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+
+    <RelativeLayout
+        android:id="@+id/images_layout"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/images_layout">
+        android:layout_centerInParent="true">
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/background_image"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@android:color/darker_gray"
+            fresco:actualImageScaleType="centerCrop"
+            fresco:retryImageScaleType="fitCenter"/>
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/foreground_image"
+            android:layout_width="@dimen/foreground_image_size"
+            android:layout_height="@dimen/foreground_image_size"
+            android:layout_alignTop="@id/background_image"
+            android:layout_alignLeft="@id/background_image"
+            android:layout_marginTop="@dimen/foreground_margin"
+            android:layout_marginLeft="@dimen/foreground_margin"
+            android:padding="@id/foreground_padding_white_border"
+            android:background="@drawable/drop_shadow"
+            fresco:actualImageScaleType="centerCrop"
+            fresco:retryImageScaleType="fitCenter"
+            fresco:failureImage="@drawable/retry_please"
+            fresco:roundAsCircle="true"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/picker_buttons_layout"
+        android:layout_below="@id/images_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <Button
             android:id="@+id/pick_background_button"
             android:layout_width="wrap_content"
@@ -23,47 +53,15 @@
             android:layout_height="wrap_content"
             android:text="@string/pick_foreground_image"
             android:textSize="@dimen/foreground_background_button_text_size"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save_button_text"/>
     </LinearLayout>
-
-    <com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/my_image_view"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        fresco:placeholderImage="@drawable/ic_launcher"/>
-
-    <RelativeLayout
-        android:id="@+id/images_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
-        <ImageView
-            android:id="@+id/background_image"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:background="@android:color/darker_gray"
-            />
-        <ImageView
-            android:id="@+id/foreground_image"
-            android:layout_width="@dimen/foreground_image_size"
-            android:layout_height="@dimen/foreground_image_size"
-            android:layout_alignTop="@id/background_image"
-            android:layout_alignLeft="@id/background_image"
-            android:layout_marginTop="@dimen/foreground_margin"
-            android:layout_marginLeft="@dimen/foreground_margin"
-            android:padding="@id/foreground_padding_white_border"
-            android:src="@drawable/ic_launcher"
-            android:scaleType="centerCrop"
-            android:background="@drawable/drop_shadow"
-            />
-    </RelativeLayout>
-
-    <Button
-        android:id="@+id/save_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/images_layout"
-        android:layout_centerHorizontal="true"
-        android:text="@string/save_button_text"
-        />
 
 </RelativeLayout>

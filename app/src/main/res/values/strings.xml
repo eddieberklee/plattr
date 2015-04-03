@@ -10,8 +10,8 @@
 
     <!-- Errors -->
     <string name="error_bad_cursor">Bad cursor!</string>
-    <string name="save_button_text">Save to Camera Roll</string>
-    <string name="pick_foreground_image">Choose Foreground</string>
-    <string name="pick_background_image">Choose Background</string>
+    <string name="save_button_text">Save</string>
+    <string name="pick_foreground_image">Foreground</string>
+    <string name="pick_background_image">Background</string>
 
 </resources>
