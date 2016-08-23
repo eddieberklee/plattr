@@ -53,18 +53,15 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
 
   private final String TAG = PictureComposerFragment.class.getSimpleName();
 
-  /* Intent Actions */
   private final int ACTION_REQUEST_GALLERY_BACKGROUND = 1;
   private final int ACTION_REQUEST_GALLERY_FOREGROUND = 2;
   private final int ACTION_PIC_CROP_BACKGROUND = 3;
   private final int ACTION_PIC_CROP_FOREGROUND = 4;
 
-  /* Member Variables */
   private Uri mImageCaptureUri;
   private int mActivePointerIndex;
   private Point[] CORNER_COORDINATES = new Point[4];
 
-  /* Member Variables - Views */
   private View mRootLayout;
   private DraweeView mBackgroundImage;
   private DraweeView mForegroundImage;
