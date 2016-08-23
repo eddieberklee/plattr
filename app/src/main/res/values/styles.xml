@@ -5,9 +5,10 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="image_picker_buttons">
-        <item name="android:background">@color/flatui_blue1</item>
+    <style name="ImagePickerButtonStyle">
+        <item name="android:background">@color/flatui_blue_1</item>
         <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/foreground_background_button_text_size</item>
     </style>
 
 </resources>

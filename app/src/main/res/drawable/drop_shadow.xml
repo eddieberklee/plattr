@@ -37,7 +37,7 @@
     <item>
         <shape>
             <solid android:color="@android:color/white" />
-            <corners android:radius="75dp" />
+            <corners android:radius="@dimen/foreground_image_corner_radius" />
         </shape>
     </item>
 </layer-list>

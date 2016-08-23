@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
-    tools:context=".PictureComposerActivity$PlaceholderFragment"
+    tools:context=".PictureComposerActivity$PictureComposerFragment"
     android:id="@+id/root_layout">
 
 
@@ -33,47 +33,38 @@
             fresco:roundAsCircle="true"/>
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/picker_buttons_layout"
         android:layout_below="@id/images_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="15dp">
-        <TextView
-            android:id="@+id/set_images_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAllCaps="true"
-            android:textSize="11sp"
-            android:layout_marginBottom="10dp"
-            android:text="@string/image_picker_title"
-            tools:text="@string/image_picker_title"/>
+        android:orientation="horizontal">
         <Button
             android:id="@+id/pick_background_button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="40dp"
-            android:layout_below="@id/set_images_title"
+            android:layout_weight="1"
             android:text="@string/pick_background_image"
-            android:textSize="@dimen/foreground_background_button_text_size"
-            style="@style/image_picker_buttons"/>
+            style="@style/ImagePickerButtonStyle"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/flatui_blue_2"/>
         <Button
             android:id="@+id/pick_foreground_button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="40dp"
-            android:layout_below="@id/set_images_title"
-            android:layout_toRightOf="@id/set_images_title"
-            android:layout_marginLeft="35dp"
+            android:layout_weight="1"
             android:text="@string/pick_foreground_image"
-            android:textSize="@dimen/foreground_background_button_text_size"
-            style="@style/image_picker_buttons"/>
-    </RelativeLayout>
+            style="@style/ImagePickerButtonStyle"/>
+    </LinearLayout>
 
     <Button
         android:id="@+id/save_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:textColor="@color/flatui_blue1"
+        android:textColor="@color/flatui_blue_1"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:paddingTop="20dp"
