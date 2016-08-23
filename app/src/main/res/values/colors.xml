@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="flatui_teal1">#1abc9c</color>
+    <color name="flatui_teal2">#16a085</color>
+    <color name="flatui_green1">#2ecc71</color>
+    <color name="flatui_green2">#27ae60</color>
+    <color name="flatui_blue1">#3498db</color>
+    <color name="flatui_blue2">#2980b9</color>
+    <color name="flatui_purple1">#9b59b6</color>
+    <color name="flatui_purple2">#8e44ad</color>
+    <color name="flatui_darkblue1">#34495e</color>
+    <color name="flatui_darkblue2">#2c3e50</color>
+    <color name="flatui_yellow1">#f1c40f</color>
+    <color name="flatui_yellow2">#f39c12</color>
+    <color name="flatui_orange1">#e67e22</color>
+    <color name="flatui_orange2">#d35400</color>
+    <color name="flatui_red1">#e74c3c</color>
+    <color name="flatui_red2">#c0392b</color>
+    <color name="flatui_grey1">#95a5a6</color>
+    <color name="flatui_grey2">#7f8c8d</color>
+
+    <color name="white">#ffffff</color>
+</resources>

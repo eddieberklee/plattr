@@ -14,4 +14,6 @@
     <string name="pick_foreground_image">Foreground</string>
     <string name="pick_background_image">Background</string>
 
+    <string name="image_picker_title"><u>Set Images:</u></string>
+
 </resources>
