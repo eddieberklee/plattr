@@ -5,12 +5,6 @@
     <item>
         <shape android:shape="oval">
             <padding android:top="1dp" android:right="1dp" android:bottom="1dp" android:left="1dp" />
-            <solid android:color="#10777777" />
-        </shape>
-    </item>
-    <item>
-        <shape android:shape="oval">
-            <padding android:top="1dp" android:right="1dp" android:bottom="1dp" android:left="1dp" />
             <solid android:color="#20777777" />
         </shape>
     </item>
@@ -23,13 +17,19 @@
     <item>
         <shape android:shape="oval">
             <padding android:top="1dp" android:right="1dp" android:bottom="1dp" android:left="1dp" />
-            <solid android:color="#50777777" />
+            <solid android:color="#40777777" />
         </shape>
     </item>
     <item>
         <shape android:shape="oval">
             <padding android:top="1dp" android:right="1dp" android:bottom="1dp" android:left="1dp" />
-            <solid android:color="#70777777" />
+            <solid android:color="#60777777" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="oval">
+            <padding android:top="1dp" android:right="1dp" android:bottom="1dp" android:left="1dp" />
+            <solid android:color="#80777777" />
         </shape>
     </item>
 

@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -99,8 +100,11 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
           }
           Log.d(TAG, "Corner Distances " + "TL:"+distances[0] + " TR:"+distances[1]
               + " BL:"+distances[2] + " BR:"+distances[3]);
-          v.setX(CORNER_COORDINATES[minDistanceIndex].x);
-          v.setY(CORNER_COORDINATES[minDistanceIndex].y);
+          v.animate()
+              .x(CORNER_COORDINATES[minDistanceIndex].x)
+              .y(CORNER_COORDINATES[minDistanceIndex].y)
+              .setInterpolator(new FastOutSlowInInterpolator())
+              .setDuration(200);
           break;
         }
       }
