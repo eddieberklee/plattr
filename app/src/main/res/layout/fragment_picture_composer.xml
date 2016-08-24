@@ -5,16 +5,18 @@
     tools:context=".PictureComposerActivity$PictureComposerFragment"
     android:id="@+id/root_layout">
 
-
     <RelativeLayout
         android:id="@+id/images_layout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="3dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/black_outline_rect">
         <com.facebook.drawee.view.DraweeView
             android:id="@+id/background_image"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:background="@android:color/darker_gray"
+            android:background="@color/greyscale_2"
             fresco:actualImageScaleType="centerCrop"
             fresco:retryImageScaleType="fitCenter"/>
         <com.facebook.drawee.view.SimpleDraweeView
@@ -39,32 +41,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <Button
+        <com.compscieddy.plattr.ui.FontTextView
             android:id="@+id/pick_background_button"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/pick_background_image"
             style="@style/ImagePickerButtonStyle"/>
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/flatui_blue_2"/>
-        <Button
+            android:background="@color/flatui_blue_2_transp_50"/>
+        <com.compscieddy.plattr.ui.FontTextView
             android:id="@+id/pick_foreground_button"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/pick_foreground_image"
             style="@style/ImagePickerButtonStyle"/>
     </LinearLayout>
 
-    <Button
+    <com.compscieddy.plattr.ui.FontTextView
         android:id="@+id/save_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:textColor="@color/flatui_blue_1"
+        android:gravity="center"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:paddingTop="20dp"

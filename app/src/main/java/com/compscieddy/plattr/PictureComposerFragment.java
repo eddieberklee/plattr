@@ -57,10 +57,10 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
   private View mRootLayout;
   private DraweeView mBackgroundImage;
   private DraweeView mForegroundImage;
-  private Button mSaveButton;
   private RelativeLayout mImagesLayout;
-  private Button mPickForegroundButton;
-  private Button mPickBackgroundButton;
+  private View mSaveButton;
+  private View mPickForegroundButton;
+  private View mPickBackgroundButton;
   private String mBackgroundImagePath;
   private String mForegroundImagePath;
 
@@ -178,10 +178,10 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
 
     mBackgroundImage = (DraweeView) mRootLayout.findViewById(R.id.background_image);
     mForegroundImage = (DraweeView) mRootLayout.findViewById(R.id.foreground_image);
-    mSaveButton = (Button) mRootLayout.findViewById(R.id.save_button);
+    mSaveButton = mRootLayout.findViewById(R.id.save_button);
     mImagesLayout = (RelativeLayout) mRootLayout.findViewById(R.id.images_layout);
-    mPickForegroundButton = (Button) mRootLayout.findViewById(R.id.pick_foreground_button);
-    mPickBackgroundButton = (Button) mRootLayout.findViewById(R.id.pick_background_button);
+    mPickForegroundButton = mRootLayout.findViewById(R.id.pick_foreground_button);
+    mPickBackgroundButton = mRootLayout.findViewById(R.id.pick_background_button);
 
     mBackgroundImage.getViewTreeObserver().addOnGlobalLayoutListener(this);
 

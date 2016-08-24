@@ -7,7 +7,4 @@
     <dimen name="foreground_image_size">160dp</dimen>
     <dimen name="foreground_image_corner_radius">80dp</dimen>
 
-    <!-- Font Sizes -->
-    <dimen name="foreground_background_button_text_size">10sp</dimen>
-
 </resources>
