@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 
@@ -22,24 +23,28 @@ import static android.content.ContentValues.TAG;
  */
 
 public class SaveImageAsyncTask extends AsyncTask<Integer, Void, Void> {
-  private View imagesLayout;
+  private View mImagesLayout;
+  private View mRootView;
   private final Context mContext;
 
-  public SaveImageAsyncTask(Context context, View imagesLayout) {
+  public SaveImageAsyncTask(Context context, View imagesLayout, View rootView) {
     super();
     mContext = context;
-    this.imagesLayout = imagesLayout;
+    this.mImagesLayout = imagesLayout;
+    this.mRootView = rootView;
   }
 
   @Override
   protected void onPreExecute() {
     super.onPreExecute();
+    Snackbar snackbar = Snackbar.make(mRootView, "Image is saving to your Camera Roll", Snackbar.LENGTH_SHORT);
+    snackbar.show();
   }
 
   @Override
   protected Void doInBackground(Integer... params) {
-    int width = params[0];
-    int height = params[1];
+    int imagesLayoutWidth = params[0];
+    int imagesLayoutHeight = params[1];
 
     File folder = new File(Environment.getExternalStorageDirectory().toString());
     if (!folder.exists()) { folder.mkdirs(); }
@@ -55,8 +60,8 @@ public class SaveImageAsyncTask extends AsyncTask<Integer, Void, Void> {
     FileOutputStream outputStream = null;
     try {
       outputStream = new FileOutputStream(file);
-      Bitmap compositeBitmap = Bitmap.createBitmap(this.imagesLayout.getWidth(), this.imagesLayout.getHeight(), Bitmap.Config.ARGB_8888);
-      this.imagesLayout.draw(new Canvas(compositeBitmap));
+      Bitmap compositeBitmap = Bitmap.createBitmap(imagesLayoutWidth, imagesLayoutHeight, Bitmap.Config.ARGB_8888);
+      this.mImagesLayout.draw(new Canvas(compositeBitmap));
       compositeBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
 
       SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HHmmss"); // ("yyyy_MM_dd_HH_mm_ss");

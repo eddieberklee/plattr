@@ -8,16 +8,13 @@
     <RelativeLayout
         android:id="@+id/images_layout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="3dp"
-        android:layout_margin="10dp"
-        android:background="@drawable/black_outline_rect">
+        android:layout_height="wrap_content">
         <com.facebook.drawee.view.DraweeView
             android:id="@+id/background_image"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:background="@color/greyscale_2"
-            fresco:actualImageScaleType="centerCrop"
+            fresco:actualImageScaleType="fitCenter"
             fresco:retryImageScaleType="fitCenter"/>
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/foreground_image"

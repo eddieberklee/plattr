@@ -3,12 +3,10 @@ package com.compscieddy.plattr;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,9 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.compscieddy.plattr.ui.RoundImage;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -30,13 +26,6 @@ import com.facebook.drawee.view.DraweeView;
 import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * A picture composer fragment for selecting the 2 images that will make up the final platter composition.
@@ -112,59 +101,18 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
     public void onClick(View v) {
       final float startTime = System.currentTimeMillis();
       Log.d(TAG, "Save button started at: " + startTime);
-      AsyncTask<Void, Void, Void> saveImageTask = new AsyncTask<Void, Void, Void>() {
-        @Override
-        protected void onPreExecute() {
-          super.onPreExecute();
-        }
-        @Override
-        protected Void doInBackground(Void... params) {
-          File folder = new File(Environment.getExternalStorageDirectory().toString());
-          if (!folder.exists()) { folder.mkdirs(); }
-          String uniqueName = "" + System.currentTimeMillis();
-          File file = new File(Environment.getExternalStorageDirectory().toString(), uniqueName + ".png");
-          if (!file.exists()) {
-            try {
-              file.createNewFile();
-            } catch (IOException e) {
-              LogUtils.errorAndToast(getActivity(), TAG, "Error creating file", e);
-            }
-          }
-          FileOutputStream outputStream = null;
-          try {
-            outputStream = new FileOutputStream(file);
-            Bitmap compositeBitmap = Bitmap.createBitmap(mImagesLayout.getWidth(), mImagesLayout.getHeight(), Bitmap.Config.ARGB_8888);
-            mImagesLayout.draw(new Canvas(compositeBitmap));
-            compositeBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HHmmss"); // ("yyyy_MM_dd_HH_mm_ss");
-            Date now = new Date();
-            String fileName = formatter.format(now);
-
-            Utils.insertImage(getActivity().getContentResolver(), compositeBitmap, fileName, "Plattr Image");
-
-          } catch (FileNotFoundException e) {
-            LogUtils.errorAndToast(getActivity(), TAG, "File not found", e);
-          } catch (Exception e) {
-            LogUtils.errorAndToast(getActivity(), TAG, "General exception outputting composite image", e);
-          }
-          return null;
-        }
-        @Override
-        protected void onPostExecute(Void aVoid) {
-          super.onPostExecute(aVoid);
-          Toast.makeText(getActivity(), "Image saved to Camera Roll", Toast.LENGTH_SHORT).show();
-        }
-      };
-      saveImageTask.execute();
+      AsyncTask<Integer, Void, Void> saveImageTask = new SaveImageAsyncTask(mActivity, mImagesLayout, mRootLayout);
+      saveImageTask.execute(mImagesLayout.getWidth(), mImagesLayout.getHeight());
     }
   };
+  private Activity mActivity;
 
   public PictureComposerFragment() {
   }
 
   @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    mActivity = getActivity();
     mRootLayout = inflater.inflate(R.layout.fragment_picture_composer, container, false);
 
     mBackgroundImage = (DraweeView) mRootLayout.findViewById(R.id.background_image);
