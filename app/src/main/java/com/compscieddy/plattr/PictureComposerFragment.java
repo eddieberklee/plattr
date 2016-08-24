@@ -61,8 +61,6 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
   private View mSaveButton;
   private View mPickForegroundButton;
   private View mPickBackgroundButton;
-  private String mBackgroundImagePath;
-  private String mForegroundImagePath;
 
   private View.OnTouchListener mForegroundImageOnTouchListener = new View.OnTouchListener() {
     @Override
@@ -83,23 +81,20 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
           // Snap to one of the corners
           float currentX = v.getX();
           float currentY = v.getY();
-          Log.d(TAG, "Action Up X:"+currentX+" Y:"+currentY);
-          float distances[] = new float[4];
+          float distanceToCorners[] = new float[4];
           int minDistanceIndex = 0;
           for (int i=0; i<CORNER_COORDINATES.length; i++) {
             float cornerX = CORNER_COORDINATES[i].x;
             float cornerY = CORNER_COORDINATES[i].y;
-            float distance = (float) Math.sqrt(
+            float distanceToCorner = (float) Math.sqrt(
                 Math.pow( Math.abs(cornerX - currentX), 2)
                     + Math.pow( Math.abs(cornerY - currentY), 2)
             );
-            if (distance < distances[minDistanceIndex]) {
+            if (distanceToCorner < distanceToCorners[minDistanceIndex]) {
               minDistanceIndex = i;
             }
-            distances[i] = distance;
+            distanceToCorners[i] = distanceToCorner;
           }
-          Log.d(TAG, "Corner Distances " + "TL:"+distances[0] + " TR:"+distances[1]
-              + " BL:"+distances[2] + " BR:"+distances[3]);
           v.animate()
               .x(CORNER_COORDINATES[minDistanceIndex].x)
               .y(CORNER_COORDINATES[minDistanceIndex].y)
@@ -139,10 +134,6 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
           try {
             outputStream = new FileOutputStream(file);
             Bitmap compositeBitmap = Bitmap.createBitmap(mImagesLayout.getWidth(), mImagesLayout.getHeight(), Bitmap.Config.ARGB_8888);
-
-//            Bitmap backgroundBitmap = Utils.convertToMutable(BitmapFactory.decodeFile(mBackgroundImagePath));
-//            compositeBitmap = backgroundBitmap;
-
             mImagesLayout.draw(new Canvas(compositeBitmap));
             compositeBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
 
