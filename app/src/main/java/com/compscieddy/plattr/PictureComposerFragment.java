@@ -23,9 +23,13 @@ import com.compscieddy.plattr.ui.RoundImage;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
 import com.facebook.drawee.view.DraweeView;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * A picture composer fragment for selecting the 2 images that will make up the final platter composition.
@@ -43,8 +47,8 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
   private int mActivePointerIndex;
   private Point[] CORNER_COORDINATES = new Point[4];
 
-  private View mRootLayout;
-  private DraweeView mBackgroundImage;
+  private View mRootView;
+  @Bind(R.id.background_image) SimpleDraweeView mBackgroundImage;
   private DraweeView mForegroundImage;
   private RelativeLayout mImagesLayout;
   private View mSaveButton;
@@ -101,7 +105,7 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
     public void onClick(View v) {
       final float startTime = System.currentTimeMillis();
       Log.d(TAG, "Save button started at: " + startTime);
-      AsyncTask<Integer, Void, Void> saveImageTask = new SaveImageAsyncTask(mActivity, mImagesLayout, mRootLayout);
+      AsyncTask<Integer, Void, Void> saveImageTask = new SaveImageAsyncTask(mActivity, mImagesLayout, mRootView);
       saveImageTask.execute(mImagesLayout.getWidth(), mImagesLayout.getHeight());
     }
   };
@@ -113,14 +117,13 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
   @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     mActivity = getActivity();
-    mRootLayout = inflater.inflate(R.layout.fragment_picture_composer, container, false);
-
-    mBackgroundImage = (DraweeView) mRootLayout.findViewById(R.id.background_image);
-    mForegroundImage = (DraweeView) mRootLayout.findViewById(R.id.foreground_image);
-    mSaveButton = mRootLayout.findViewById(R.id.save_button);
-    mImagesLayout = (RelativeLayout) mRootLayout.findViewById(R.id.images_layout);
-    mPickForegroundButton = mRootLayout.findViewById(R.id.pick_foreground_button);
-    mPickBackgroundButton = mRootLayout.findViewById(R.id.pick_background_button);
+    mRootView = inflater.inflate(R.layout.fragment_picture_composer, container, false);
+    ButterKnife.bind(this, mRootView);
+    mForegroundImage = (DraweeView) mRootView.findViewById(R.id.foreground_image);
+    mSaveButton = mRootView.findViewById(R.id.save_button);
+    mImagesLayout = (RelativeLayout) mRootView.findViewById(R.id.images_layout);
+    mPickForegroundButton = mRootView.findViewById(R.id.pick_foreground_button);
+    mPickBackgroundButton = mRootView.findViewById(R.id.pick_background_button);
 
     mBackgroundImage.getViewTreeObserver().addOnGlobalLayoutListener(this);
 
@@ -131,7 +134,7 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
     mForegroundImage.setOnTouchListener(mForegroundImageOnTouchListener);
     mSaveButton.setOnClickListener(mSaveButtonOnClickListener);
 
-    return mRootLayout;
+    return mRootView;
   }
 
   private void sendChoosePictureIntent(int action_request) {
@@ -190,7 +193,6 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
 
       switch (requestCode) {
         case ACTION_REQUEST_GALLERY_BACKGROUND:
-//          mBackgroundImagePath = imagePath;
           mBackgroundImage.setImageURI(mImageCaptureUri);
           break;
         case ACTION_REQUEST_GALLERY_FOREGROUND:

@@ -1,75 +1,81 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<RelativeLayout
+    android:id="@+id/root_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PictureComposerActivity$PictureComposerFragment"
-    android:id="@+id/root_layout">
+    tools:context=".PictureComposerActivity$PictureComposerFragment">
 
     <RelativeLayout
         android:id="@+id/images_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-        <com.facebook.drawee.view.DraweeView
+
+        <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/background_image"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:background="@color/greyscale_2"
-            fresco:actualImageScaleType="fitCenter"
-            fresco:retryImageScaleType="fitCenter"/>
+            android:layout_height="wrap_content"
+            fresco:actualImageScaleType="centerCrop"
+            android:background="@color/greyscale_2"/>
+
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/foreground_image"
             android:layout_width="@dimen/foreground_image_size"
             android:layout_height="@dimen/foreground_image_size"
-            android:layout_alignTop="@id/background_image"
             android:layout_alignLeft="@id/background_image"
-            android:layout_marginTop="@dimen/foreground_margin"
+            android:layout_alignTop="@id/background_image"
             android:layout_marginLeft="@dimen/foreground_margin"
+            android:layout_marginTop="@dimen/foreground_margin"
+            android:background="@drawable/white_bg_drop_shadow"
             android:padding="@id/foreground_padding_white_border"
-            android:background="@drawable/drop_shadow"
             fresco:actualImageScaleType="centerCrop"
-            fresco:retryImageScaleType="fitCenter"
             fresco:failureImage="@drawable/retry_please"
+            fresco:retryImageScaleType="fitCenter"
             fresco:roundAsCircle="true"/>
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/picker_buttons_layout"
-        android:layout_below="@id/images_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/images_layout"
         android:orientation="horizontal">
+
         <com.compscieddy.plattr.ui.FontTextView
             android:id="@+id/pick_background_button"
+            style="@style/ImagePickerButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/pick_background_image"
-            style="@style/ImagePickerButtonStyle"/>
+            android:text="@string/pick_background_image"/>
+
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="@color/flatui_blue_2_transp_50"/>
+
         <com.compscieddy.plattr.ui.FontTextView
             android:id="@+id/pick_foreground_button"
+            style="@style/ImagePickerButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/pick_foreground_image"
-            style="@style/ImagePickerButtonStyle"/>
+            android:text="@string/pick_foreground_image"/>
     </LinearLayout>
 
     <com.compscieddy.plattr.ui.FontTextView
         android:id="@+id/save_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:textColor="@color/flatui_blue_1"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:paddingTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:background="@color/white"
+        android:gravity="center"
         android:paddingBottom="20dp"
+        android:paddingTop="20dp"
         android:text="@string/save_button_text"
+        android:textColor="@color/flatui_blue_1"
         android:textSize="18sp"/>
 
 </RelativeLayout>
