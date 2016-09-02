@@ -47,8 +47,8 @@ public class Utils {
     values.put(MediaStore.Images.Media.TITLE, title);
     values.put(MediaStore.Images.Media.DISPLAY_NAME, title);
     values.put(MediaStore.Images.Media.DESCRIPTION, description);
-    values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
-    // Add the date meta data to ensure the image is added at the front of the gallery
+    values.put(MediaStore.Images.Media.MIME_TYPE, "imageView/png");
+    // Add the date meta data to ensure the imageView is added at the front of the gallery
     values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis());
     values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
 
@@ -142,13 +142,13 @@ public class Utils {
    * Converts a immutable bitmap to a mutable bitmap. This operation doesn't allocates
    * more memory that there is already allocated.
    *
-   * @param imgIn - Source image. It will be released, and should not be used more
+   * @param imgIn - Source imageView. It will be released, and should not be used more
    * @return a copy of imgIn, but muttable.
    */
   public static Bitmap convertToMutable(Bitmap imgIn) {
     try {
       //this is the file going to use temporally to save the bytes.
-      // This file will not be a image, it will store the raw image data.
+      // This file will not be a imageView, it will store the raw imageView data.
       File file = new File(Environment.getExternalStorageDirectory() + File.separator + "temp.tmp");
 
       //Open an RandomAccessFile

@@ -78,11 +78,11 @@ public class GalleryActivity extends Activity {
         }
         if (cnt == 0) {
           Toast.makeText(getApplicationContext(),
-              "Please select at least one image",
+              "Please select at least one imageView",
               Toast.LENGTH_LONG).show();
         } else {
           Toast.makeText(getApplicationContext(),
-              "You've selected Total " + cnt + " image(s).",
+              "You've selected Total " + cnt + " imageView(s).",
               Toast.LENGTH_LONG).show();
           Log.d("SelectedImages", selectImages);
         }
@@ -145,7 +145,7 @@ public class GalleryActivity extends Activity {
           int id = v.getId();
           Intent intent = new Intent();
           intent.setAction(Intent.ACTION_VIEW);
-          intent.setDataAndType(Uri.parse("file://" + imagePaths[id]), "image/*");
+          intent.setDataAndType(Uri.parse("file://" + imagePaths[id]), "imageView/*");
           startActivity(intent);
         }
       });

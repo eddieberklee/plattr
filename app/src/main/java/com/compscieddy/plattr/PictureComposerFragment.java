@@ -2,6 +2,7 @@ package com.compscieddy.plattr;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -11,6 +12,8 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -28,6 +31,9 @@ import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -37,6 +43,7 @@ import butterknife.ButterKnife;
 public class PictureComposerFragment extends Fragment implements ViewTreeObserver.OnGlobalLayoutListener {
 
   private final String TAG = PictureComposerFragment.class.getSimpleName();
+  private static final Lawg L = Lawg.newInstance(PictureComposerFragment.class.getSimpleName());
 
   private final int ACTION_REQUEST_GALLERY_BACKGROUND = 1;
   private final int ACTION_REQUEST_GALLERY_FOREGROUND = 2;
@@ -49,11 +56,14 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
 
   private View mRootView;
   @Bind(R.id.background_image) SimpleDraweeView mBackgroundImage;
-  private DraweeView mForegroundImage;
-  private RelativeLayout mImagesLayout;
-  private View mSaveButton;
-  private View mPickForegroundButton;
-  private View mPickBackgroundButton;
+  @Bind(R.id.foreground_image) DraweeView mForegroundImage;
+  @Bind(R.id.images_layout) RelativeLayout mImagesLayout;
+  @Bind(R.id.save_button) View mSaveButton;
+  @Bind(R.id.pick_foreground_button) View mPickForegroundButton;
+  @Bind(R.id.pick_background_button) View mPickBackgroundButton;
+  @Bind(R.id.gallery_recyclerview) RecyclerView mGalleryRecyclerView;
+
+  List<GalleryImageModel> mGalleryImages = new ArrayList<>();
 
   private View.OnTouchListener mForegroundImageOnTouchListener = new View.OnTouchListener() {
     @Override
@@ -119,11 +129,8 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
     mActivity = getActivity();
     mRootView = inflater.inflate(R.layout.fragment_picture_composer, container, false);
     ButterKnife.bind(this, mRootView);
-    mForegroundImage = (DraweeView) mRootView.findViewById(R.id.foreground_image);
-    mSaveButton = mRootView.findViewById(R.id.save_button);
-    mImagesLayout = (RelativeLayout) mRootView.findViewById(R.id.images_layout);
-    mPickForegroundButton = mRootView.findViewById(R.id.pick_foreground_button);
-    mPickBackgroundButton = mRootView.findViewById(R.id.pick_background_button);
+
+    init();
 
     mBackgroundImage.getViewTreeObserver().addOnGlobalLayoutListener(this);
 
@@ -137,9 +144,49 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
     return mRootView;
   }
 
+  private void init() {
+    loadGalleryImages();
+    RecyclerView.Adapter galleryAdapter = new GalleryAdapter(mActivity, mGalleryImages);
+    mGalleryRecyclerView.setAdapter(galleryAdapter);
+    final int NUM_COLUMNS = 2;
+    mGalleryRecyclerView.setLayoutManager(new GridLayoutManager(mActivity, NUM_COLUMNS));
+  }
+
+  /** Populates mGalleryImages by using a SQLite cursor to get the gallery images info */
+  private void loadGalleryImages() {
+    final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID, MediaStore.Images.Media.DISPLAY_NAME, MediaStore.Images.Media.TITLE };
+    final String orderBy = MediaStore.Images.Media.DATE_ADDED;
+    // todo: read up on and use LoaderManager instead
+    Cursor imagesCursor = mActivity.managedQuery(
+        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null,
+        null, orderBy);
+    try {
+      int image_column_index = imagesCursor.getColumnIndex(MediaStore.Images.Media._ID);
+      for (int i = 0; i < imagesCursor.getCount(); i++) {
+        imagesCursor.moveToPosition(i);
+        int dataColumnIndex = imagesCursor.getColumnIndex(MediaStore.Images.Media.DATA);
+        int displayNameColumnIndex = imagesCursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME);
+        int titleColumnIndex = imagesCursor.getColumnIndex(MediaStore.Images.Media.TITLE);
+        /*
+        int id = imagesCursor.getInt(image_column_index);
+        thumbnailBitmaps[i] = MediaStore.Images.Thumbnails.getThumbnail(
+            getApplicationContext().getContentResolver(), id,
+            MediaStore.Images.Thumbnails.MICRO_KIND, null);
+        */
+        String url = imagesCursor.getString(dataColumnIndex);
+        String title = imagesCursor.getString(titleColumnIndex);
+        String displayName = imagesCursor.getString(displayNameColumnIndex);
+        L.d("Image info " + " url: " + url + " title: " + title + " displayName: " + displayName);
+        mGalleryImages.add(new GalleryImageModel(url));
+      }
+    } finally {
+      if (imagesCursor != null) imagesCursor.close();
+    }
+  }
+
   private void sendChoosePictureIntent(int action_request) {
     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-    intent.setType("image/*");
+    intent.setType("imageView/*");
 //    Intent chooser = Intent.createChooser(intent, getString(R.string.choose_picture_dialog_title));
     Intent chooser = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
     startActivityForResult(chooser, action_request);
@@ -180,7 +227,7 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
 //      }
 
 //          Intent cropIntent = new Intent("com.android.camera.action.CROP");
-//          cropIntent.setDataAndType(mImageCaptureUri, "image/*");
+//          cropIntent.setDataAndType(mImageCaptureUri, "imageView/*");
 //          cropIntent.putExtra("crop", "true");
 //          cropIntent.putExtra("aspectX", 1);
 //          cropIntent.putExtra("aspectY", 1);
@@ -277,8 +324,4 @@ public class PictureComposerFragment extends Fragment implements ViewTreeObserve
     CORNER_COORDINATES[3] = point; // bottom right
   }
 
-  public class Point {
-    public float x = 0;
-    public float y = 0;
-  }
 }

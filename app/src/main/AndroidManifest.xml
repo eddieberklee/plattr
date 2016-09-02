@@ -14,14 +14,17 @@
         android:name=".TwiceApplication">
         <activity
             android:name=".PictureComposerActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+        </activity>
+        <activity
+            android:name=".GalleryActivity">
+        </activity>
+        <activity android:name=".QuickCaptureActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".GalleryActivity">
         </activity>
     </application>
 

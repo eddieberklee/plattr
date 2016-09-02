@@ -73,7 +73,7 @@ public class SaveImageAsyncTask extends AsyncTask<Integer, Void, Void> {
     } catch (FileNotFoundException e) {
       Log.e(TAG, "File not found", e);
     } catch (Exception e) {
-      Log.e(TAG, "General exception outputting composite image", e);
+      Log.e(TAG, "General exception outputting composite imageView", e);
     }
 
     return null;
